@@ -1,18 +1,27 @@
-// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { BookModule } from './book/book.module';
-import { AuthModule } from './auth/auth.module'; // Ensure this path is correct
+import { AuthModule } from './auth/auth.module';
 import { AddCardModule } from './addCard/addCard.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://admin:admin@cluster0.ynsro.mongodb.net/myapp2'),
+    ConfigModule.forRoot({
+      isGlobal: true, // Makes ConfigModule available globally
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+      inject: [ConfigService],
+    }),
     UserModule,
     BookModule,
-    AuthModule, 
-   AddCardModule,
+    AuthModule,
+    AddCardModule,
   ],
 })
 export class AppModule {}

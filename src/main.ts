@@ -6,7 +6,7 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: 'http://localhost:3001', // Adjust this based on your front-end origin
+    origin: 'https://book-store-front-end-one.vercel.app/', // Adjust this based on your front-end origin
     methods: 'GET,POST,PUT,DELETE',
     credentials: true
   });
